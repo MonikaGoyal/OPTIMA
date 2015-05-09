@@ -13,7 +13,7 @@ shinyUI(fluidPage(
       textInput("entity1", "Keyword: ","#Windows 10")
       )  ,
     wellPanel(
-      sliderInput("maxTweets","Number of recent tweets to use for analysis:",min=50,max=1000,value=100,step=1), # The max can, of course, be increased
+      sliderInput("maxTweets","Number of recent tweets to use for analysis:",min=100,max=1000,value=300,step=1), # The max can, of course, be increased
       actionButton(inputId='actb',icon =icon("twitter"), label="Hit it!")
     )),
   
@@ -31,10 +31,11 @@ shinyUI(fluidPage(
                plotOutput("entity2wcplot")),
       
       tabPanel("Sentiment Scoring", 
+               br(),
                plotOutput("sentiboxplot"),
-               #tableOutput('contents'),
-               tableOutput("sentiheadtable"),
-               tableOutput("sentitailtable"),id="test"),
+               #tableOutput("sentiheadtable"),
+               #tableOutput("sentitailtable"),
+               id="test"),
       
       tabPanel("SentiPlots",
                br(),
