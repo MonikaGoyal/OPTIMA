@@ -112,8 +112,8 @@ shinyServer(function(input, output,session) {
     # List of words and additional information on the original source from Jeffrey Breen's github site at:
     #https://github.com/jeffreybreen/twitter-sentiment-analysis-tutorial-201107/tree/master/data/opinion-lexicon-English
     
-    positivewords=readLines("positive_words.txt")
-    negativewords=readLines("negative_words.txt")
+    positivewords=readLines("positive-words.txt")
+    negativewords=readLines("negative-words.txt")
     
     #Applying score.sentiment algorithm to cleaned tweets and getting data frames of tweets, net sentiment score for a tweet 
     #(number of positive sentiments minus negative sentiments)
@@ -243,8 +243,8 @@ wordcloudentity(entity1()$text)})
     print(sentiboxplot)})
   
   #getting a feel for how sentiments were scored by scanning 10 tweets per entity and sentiment scores 
-  output$sentiheadtable<-renderTable({tab<-head(entityscores(),10)})
-  output$sentitailtable<-renderTable({tab<-tail(entityscores(),10)})
+  #output$sentiheadtable<-renderTable({tab<-head(entityscores(),10)})
+  #output$sentitailtable<-renderTable({tab<-tail(entityscores(),10)})
   
 #tab 4- Generating SentiPlots (Emotions and Polarity)
 naive<-reactive({
@@ -319,8 +319,10 @@ output$Contents <- renderTable({
     
     dataset<-read.csv(inFile$datapath)
     model <- naiveBayes(polarity ~ ., data = dataset)
-    trainData <- dataset[1:66,,drop = FALSE]
-    testData <- dataset[67:100,,drop = FALSE]
+    index <- 1:nrow(dataset)
+    testindex <- sample(index, trunc(length(index)/3))
+    trainData <- dataset[testindex,]
+    testData <- dataset[-testindex,]
     model <- naiveBayes(trainData[,1:3], trainData[,4])
     predicted <- predict(model, testData[,-4])
     pred <- predict(model, testData)
