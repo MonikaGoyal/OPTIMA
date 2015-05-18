@@ -317,12 +317,12 @@ output$Contents <- renderTable({
     if (is.null(inFile))
       return(NULL)
     
-    dataset<-read.csv(inFile$datapath)
+      dataset<-read.csv(inFile$datapath)
     model <- naiveBayes(polarity ~ ., data = dataset)
     index <- 1:nrow(dataset)
-    testindex <- sample(index, trunc(length(index)/3))
-    trainData <- dataset[testindex,]
-    testData <- dataset[-testindex,]
+    testindex <- sample(index, trunc(length(index)*30/100))
+    trainData <- dataset[-testindex,]
+    testData <- dataset[testindex,]
     model <- naiveBayes(trainData[,1:3], trainData[,4])
     predicted <- predict(model, testData[,-4])
     pred <- predict(model, testData)
@@ -336,16 +336,15 @@ output$Contents1 <- renderTable({
       return(NULL)
     
     dataset<-read.csv(inFile$datapath)
-    model  <- svm(as.factor(polarity)~., data = dataset)
-    summary(model)
+    model <- svm(polarity ~ ., data = dataset)
     index <- 1:nrow(dataset)
-    testindex <- sample(index, trunc(length(index)/3))
-    testset <- dataset[testindex,]
-    trainset <- dataset[-testindex,]
-    model  <- svm(as.factor(polarity)~., data = trainset)
-    prediction <- predict(model, testset[,-4])
-    tab <- table(pred = prediction, true = testset[,4])
-    tab
+    testindex <- sample(index, trunc(length(index)*30/100))
+    trainData <- dataset[-testindex,]
+    testData <- dataset[testindex,]
+    model <- naiveBayes(trainData[,1:3], trainData[,4])
+    predicted <- predict(model, testData[,-4])
+    pred <- predict(model, testData)
+    table(pred, testData$polarity) 
   })
   
 })
